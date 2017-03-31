@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "HWPhotoPicker"
-  s.version      = "0.0.3"
+  s.version      = "0.0.5"
   s.summary      = "自定义的PhotoPicker. 集成多选和预览功能."
 
   # This description is used to generate tags and improve search results.

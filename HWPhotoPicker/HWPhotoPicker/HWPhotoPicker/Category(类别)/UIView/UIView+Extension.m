@@ -7,22 +7,6 @@
 //
 
 #import "UIView+Extension.h"
-CGPoint CGRectGetCenter(CGRect rect)
-{
-    CGPoint pt;
-    pt.x = CGRectGetMidX(rect);
-    pt.y = CGRectGetMidY(rect);
-    return pt;
-}
-
-CGRect CGRectMoveToCenter(CGRect rect, CGPoint center)
-{
-    CGRect newrect = CGRectZero;
-    newrect.origin.x = center.x-CGRectGetMidX(rect);
-    newrect.origin.y = center.y-CGRectGetMidY(rect);
-    newrect.size = rect.size;
-    return newrect;
-}
 
 @implementation UIView (Extension)
 - (CGPoint) origin

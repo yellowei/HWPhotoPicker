@@ -8,9 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-CGPoint CGRectGetCenter(CGRect rect);
-CGRect  CGRectMoveToCenter(CGRect rect, CGPoint center);
-
 @interface UIView (Extension)
 @property CGPoint origin;
 @property CGSize size;
