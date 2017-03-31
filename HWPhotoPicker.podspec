@@ -94,7 +94,8 @@ Pod::Spec.new do |s|
   s.source_files  = "HWPhotoPicker/HWPhotoPicker/HWPhotoPicker/**/*.{h,m}"
   # s.exclude_files = "Classes/Exclude"
 
-  # s.public_header_files = "HWPhotoPicker/HWPhotoPicker/**/*.h"
+  s.public_header_files = "HWPhotoPicker/HWPhotoPicker/HWPhotoPicker/MultiPickerViewController.h"
+  s.public_header_files = "HWPhotoPicker/HWPhotoPicker/HWPhotoPicker/PhotoPickerController.h"
 
 
   # ――― Resources ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
