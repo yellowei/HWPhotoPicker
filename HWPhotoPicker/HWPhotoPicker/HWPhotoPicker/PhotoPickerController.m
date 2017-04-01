@@ -148,7 +148,8 @@ BOOL isAuthorizedFetchPhoto()
     titleLabel.text = self.title;
     self.navigationItem.titleView = titleLabel;
     
-    [self.navigationController.navigationBar setBarTintColor:[UIColor grayColor]];
+    [self.navigationController.navigationBar setBarTintColor:ECColorWithHEX(0xe6e6e6)];
+    
     
     /*
      self.assetsGroups = [[NSMutableArray alloc] initWithCapacity:0];
@@ -197,8 +198,8 @@ BOOL isAuthorizedFetchPhoto()
      // Faces
      [self.assetsLibrary enumerateGroupsWithTypes:ALAssetsGroupFaces usingBlock:assetsGroupsEnumerationBlock failureBlock:assetsGroupsFailureBlock];
      */
-    PHAuthorizationStatus status = [PHPhotoLibrary authorizationStatus];
-    if (status == PHAuthorizationStatusNotDetermined)
+    PHAuthorizationStatus authorStatus = [PHPhotoLibrary authorizationStatus];
+    if (authorStatus == PHAuthorizationStatusNotDetermined)
     {
         [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
             if (status == PHAuthorizationStatusAuthorized)
@@ -211,7 +212,7 @@ BOOL isAuthorizedFetchPhoto()
             }
         }];
     }
-    else if (status == PHAuthorizationStatusRestricted || status == PHAuthorizationStatusDenied)
+    else if (authorStatus == PHAuthorizationStatusRestricted || authorStatus == PHAuthorizationStatusDenied)
     {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"没有访问照片的权限,您可以去系统设置[设置-隐私-照片]中为牙医管家开启照片功能" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
         alert.tag = 1001;
