@@ -8,19 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		0FAFB8F765696DBC809CF28C /* libPods-HWPhotoPicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E2A8A5696D328DEF0762B383 /* libPods-HWPhotoPicker.a */; };
-		BCEC3FF71E8F9A57000B06BD /* NSArray+Util.m in Sources */ = {isa = PBXBuildFile; fileRef = BCEC3FA61E8F9A57000B06BD /* NSArray+Util.m */; };
-		BCEC3FF81E8F9A57000B06BD /* NSObject+AOP.m in Sources */ = {isa = PBXBuildFile; fileRef = BCEC3FA91E8F9A57000B06BD /* NSObject+AOP.m */; };
-		BCEC3FF91E8F9A57000B06BD /* NSObject+RunTimeUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = BCEC3FAB1E8F9A57000B06BD /* NSObject+RunTimeUtility.m */; };
-		BCEC3FFA1E8F9A57000B06BD /* NSString+CalculateSize.m in Sources */ = {isa = PBXBuildFile; fileRef = BCEC3FAE1E8F9A57000B06BD /* NSString+CalculateSize.m */; };
-		BCEC3FFB1E8F9A57000B06BD /* NSString+Date.m in Sources */ = {isa = PBXBuildFile; fileRef = BCEC3FB01E8F9A57000B06BD /* NSString+Date.m */; };
-		BCEC3FFC1E8F9A57000B06BD /* NSString+ECExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = BCEC3FB21E8F9A57000B06BD /* NSString+ECExtensions.m */; };
-		BCEC3FFD1E8F9A57000B06BD /* UIAlertView+BlockKit.m in Sources */ = {isa = PBXBuildFile; fileRef = BCEC3FB51E8F9A57000B06BD /* UIAlertView+BlockKit.m */; };
-		BCEC3FFE1E8F9A57000B06BD /* UIButton+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = BCEC3FB81E8F9A57000B06BD /* UIButton+Extension.m */; };
-		BCEC3FFF1E8F9A57000B06BD /* UIImage+ECExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = BCEC3FBB1E8F9A57000B06BD /* UIImage+ECExtensions.m */; };
-		BCEC40001E8F9A57000B06BD /* UITableView+CYLTableViewPlaceHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = BCEC3FC01E8F9A57000B06BD /* UITableView+CYLTableViewPlaceHolder.m */; };
-		BCEC40011E8F9A57000B06BD /* UIView+CommonMethods.m in Sources */ = {isa = PBXBuildFile; fileRef = BCEC3FC31E8F9A57000B06BD /* UIView+CommonMethods.m */; };
-		BCEC40021E8F9A57000B06BD /* UIView+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = BCEC3FC51E8F9A57000B06BD /* UIView+Extension.m */; };
-		BCEC40031E8F9A57000B06BD /* UIViewController+ECCommonMethods.m in Sources */ = {isa = PBXBuildFile; fileRef = BCEC3FC81E8F9A57000B06BD /* UIViewController+ECCommonMethods.m */; };
+		BCC859B91EA46F2700359AD5 /* UIView+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = BCEC3FC51E8F9A57000B06BD /* UIView+Extension.m */; };
+		BCC859BA1EA46F2E00359AD5 /* NSString+ECExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = BCEC3FB21E8F9A57000B06BD /* NSString+ECExtensions.m */; };
 		BCEC40041E8F9A57000B06BD /* AssetSourceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BCEC3FCB1E8F9A57000B06BD /* AssetSourceManager.m */; };
 		BCEC40051E8F9A57000B06BD /* ImageDataAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = BCEC3FCD1E8F9A57000B06BD /* ImageDataAPI.m */; };
 		BCEC40061E8F9A57000B06BD /* PHSourceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BCEC3FCF1E8F9A57000B06BD /* PHSourceManager.m */; };
@@ -537,36 +526,25 @@
 			files = (
 				BCEC40151E8F9A57000B06BD /* MultiPickerCell.m in Sources */,
 				BCEC40051E8F9A57000B06BD /* ImageDataAPI.m in Sources */,
+				BCC859B91EA46F2700359AD5 /* UIView+Extension.m in Sources */,
 				BCEC40081E8F9A57000B06BD /* AlbumObj.m in Sources */,
 				BCEC40101E8F9A57000B06BD /* MultiPickerViewController.m in Sources */,
 				BCEC400A1E8F9A57000B06BD /* MomentCollection.m in Sources */,
 				BCEC400D1E8F9A57000B06BD /* HWAdsScrollView.m in Sources */,
-				BCEC40021E8F9A57000B06BD /* UIView+Extension.m in Sources */,
-				BCEC3FFD1E8F9A57000B06BD /* UIAlertView+BlockKit.m in Sources */,
-				BCEC40031E8F9A57000B06BD /* UIViewController+ECCommonMethods.m in Sources */,
+				BCC859BA1EA46F2E00359AD5 /* NSString+ECExtensions.m in Sources */,
 				BCF254641E8E61B800703981 /* ViewController.m in Sources */,
 				BCEC400C1E8F9A57000B06BD /* ECShowImageView.m in Sources */,
 				BCEC40041E8F9A57000B06BD /* AssetSourceManager.m in Sources */,
-				BCEC40011E8F9A57000B06BD /* UIView+CommonMethods.m in Sources */,
 				BCEC40091E8F9A57000B06BD /* HWImageModel.m in Sources */,
 				BCEC400B1E8F9A57000B06BD /* PhotoObj.m in Sources */,
 				BCEC40181E8F9A57000B06BD /* VedioElementInfoView.m in Sources */,
 				BCF254611E8E61B800703981 /* AppDelegate.m in Sources */,
 				BCEC400E1E8F9A57000B06BD /* HWPageControl.m in Sources */,
-				BCEC3FFA1E8F9A57000B06BD /* NSString+CalculateSize.m in Sources */,
-				BCEC3FFB1E8F9A57000B06BD /* NSString+Date.m in Sources */,
-				BCEC40001E8F9A57000B06BD /* UITableView+CYLTableViewPlaceHolder.m in Sources */,
 				BCEC40161E8F9A57000B06BD /* PhotoPickerCell.m in Sources */,
-				BCEC3FFF1E8F9A57000B06BD /* UIImage+ECExtensions.m in Sources */,
 				BCEC40061E8F9A57000B06BD /* PHSourceManager.m in Sources */,
 				BCEC40171E8F9A57000B06BD /* PickerElementView.m in Sources */,
-				BCEC3FF81E8F9A57000B06BD /* NSObject+AOP.m in Sources */,
-				BCEC3FF91E8F9A57000B06BD /* NSObject+RunTimeUtility.m in Sources */,
 				BCEC400F1E8F9A57000B06BD /* HWScrollView.m in Sources */,
 				BCEC40111E8F9A57000B06BD /* PhotoPickerController.m in Sources */,
-				BCEC3FFE1E8F9A57000B06BD /* UIButton+Extension.m in Sources */,
-				BCEC3FFC1E8F9A57000B06BD /* NSString+ECExtensions.m in Sources */,
-				BCEC3FF71E8F9A57000B06BD /* NSArray+Util.m in Sources */,
 				BCF2545E1E8E61B800703981 /* main.m in Sources */,
 				BCEC40071E8F9A57000B06BD /* ALAsset+Date.m in Sources */,
 			);
