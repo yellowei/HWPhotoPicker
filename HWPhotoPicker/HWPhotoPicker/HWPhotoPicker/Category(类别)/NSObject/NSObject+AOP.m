@@ -8,6 +8,7 @@
 
 #import "NSObject+AOP.h"
 #import "GlobalHeader.h"
+#import "NSString+CalculateSize.h"
 
 #define HWAssert(condition, ...) \
 if (!(condition)){ HWLog(__FILE__, __FUNCTION__, __LINE__, __VA_ARGS__);} \
@@ -453,5 +454,245 @@ static NSString * uiview_touch_effect_higlightcolor_key = @"uiview_touch_effect_
     }
 }
 
+
+@end
+
+
+# pragma mark - UIViewController NavBar
+
+static NSString * UIViewController_hideNavgationbar_key = @"UIViewController_hideNavgationbar_key";
+
+@interface UIViewController ()<UINavigationControllerDelegate>
+
+@end
+
+@implementation UIViewController (navBar)
+
+- (BOOL)hideNavBar
+{
+    return [objc_getAssociatedObject(self, &UIViewController_hideNavgationbar_key) boolValue];
+}
+
+- (void)setHideNavBar:(BOOL)isHide
+{
+    objc_setAssociatedObject(self, &UIViewController_hideNavgationbar_key, [NSNumber numberWithBool:isHide], OBJC_ASSOCIATION_ASSIGN);
+    [self.navigationController setNavigationBarHidden:isHide  animated:NO];
+}
+
++ (void)load
+{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        /* 类方法 */
+        UIViewController * obj = [[UIViewController alloc] init];
+        [obj swizzleInstanceMethod:@selector(viewDidLoad) withMethod:@selector(swizzleViewDidLoad)];
+        [obj swizzleInstanceMethod:@selector(init) withMethod:@selector(swizzleInit)];
+        [obj swizzleInstanceMethod:@selector(viewDidAppear:) withMethod:@selector(swizzleViewDidAppear:)];
+        
+    });
+}
+
+-(void)swizzleViewDidLoad
+{
+    [self initNavBarProperty];
+    [self swizzleViewDidLoad];
+}
+
+-(void)swizzleInit
+{
+    self.hidesBottomBarWhenPushed = YES;
+    [self swizzleInit];
+}
+
+-(void)swizzleViewDidAppear:(BOOL)animated
+{
+    [self swizzleViewDidAppear:animated];
+    if (self.hideNavBar) {
+        [self.navigationController setNavigationBarHidden:self.hideNavBar animated:animated];
+        self.navigationController.delegate = self;
+    }
+    
+    //自定义返回按钮手势会消失
+    if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+        self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+        self.navigationController.interactivePopGestureRecognizer.delegate=(id)self;
+    }
+}
+
+
+-(void)initNavBarProperty
+{
+    // 设置导航条的色调 理解为"混合色"
+    UINavigationController *nav = (UINavigationController *)([self isKindOfClass:[UINavigationController class]]?self:self.navigationController);
+    nav.navigationBar.barTintColor = [UIColor whiteColor];
+    // 导航栏默认是半透明状态
+    nav.navigationBar.backgroundColor = [UIColor whiteColor];
+    nav.navigationBar.translucent = NO;
+    // 导航栏标题颜色
+    [nav.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : kECBlackColor2}];
+    
+    UIImage *colorImage = [UIImage imageWithColor:[UIColor whiteColor]];
+    [nav.navigationBar setBackgroundImage:colorImage forBarMetrics:UIBarMetricsDefault];
+    [nav.navigationBar setShadowImage:[UIImage imageWithColor:kECBlackColor5]];
+    if (nav.viewControllers.count > 1) {
+        [self initNavBackItem];
+    }
+    
+}
+
+-(void)initNavBackItem
+{
+    [self customBackImage:nil title:nil];
+}
+
+- (void)onBack:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+-(void)customBackImage:(UIImage *)backImg title:(NSString *)title
+{
+    UIView *baseView = [UIView customBackImage:backImg title:title target:self action:@selector(onBack:)];
+    
+    UIBarButtonItem *leftBarButtonItems = [[UIBarButtonItem alloc]initWithCustomView:baseView];
+    
+    UIBarButtonItem *nagetiveSpacer = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                                                                   target:nil action:nil];
+    nagetiveSpacer.width = -15;//这个值可以根据自己需要自己调整
+    
+    self.navigationItem.leftBarButtonItems = @[nagetiveSpacer, leftBarButtonItems];
+    
+}
+
+#pragma mark - UINavigationControllerDelegate
+// 将要显示控制器
+- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
+    // 判断要显示的控制器是否是自己
+    //    BOOL isShowHomePage = [viewController isKindOfClass:[self class]];
+    
+    [self.navigationController setNavigationBarHidden:viewController.hideNavBar animated:animated];
+    
+}
+
+
+
+@end
+
+@implementation UIImage (ECExtensions)
+
++ (UIImage *)imageWithColor:(UIColor *)color
+{
+    return [UIImage imageWithColor:color size:CGSizeMake(1, 1)];
+}
+
++ (UIImage *)imageWithColor:(UIColor *)color size:(CGSize)size
+{
+    CGRect rect=CGRectMake(0.0f, 0.0f, size.width, size.height);
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(context, [color CGColor]);
+    CGContextFillRect(context, rect);
+    
+    UIImage *theImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return theImage;
+}
+
+@end
+
+
+@implementation UIView (test)
+
++ (UIView *)customBackImage:(UIImage *)backImg title:(NSString *)title target:(id)target action:(SEL)action
+{
+    UIView *baseView = [[UIView alloc] initWithFrame:CGRectMake(15, 20, 60, 44)];
+    UIButton *backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    CGFloat x = 0;
+    if (kECScreenWidth > 376)
+    {
+        x = -5;
+    }
+    else if (kECScreenWidth > 321)
+    {
+        x = -2;
+    }
+    backBtn.frame = CGRectMake(x, 0, 60, 44);
+    if (action)
+    {
+        [backBtn addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
+    }
+    
+    if (backImg == nil && title.length == 0)
+    {
+        backImg = [UIImage imageNamed:@"btn_navi_return_title"];
+        CGSize size = backImg.size;
+        CGFloat scale = size.height/16;
+        size.width = size.width/scale;
+        size.height = 16;
+        [backBtn setImageEdgeInsets:UIEdgeInsetsMake((44-size.height)/2, 10, (44-size.height)/2, CGRectGetWidth(backBtn.frame)-size.width - 10)];
+    }
+    else if (backImg == nil && title.length > 0)
+    {
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 48, 44)];
+        label.textAlignment = NSTextAlignmentLeft;
+        label.textColor = kECWhiteColor;
+        label.backgroundColor = kECClearColor;
+        label.numberOfLines = 1;
+        label.text = title;
+        label.font = [UIFont systemFontOfSize:17];
+        CGSize size = [NSString contentAutoSizeWithText:title boundSize:CGSizeMake(MAXFLOAT, 20) font:label.font];
+        if (size.width > 80)
+        {
+            size.width = 80;
+        }
+        else if (size.width < 20)
+        {
+            size.width = 20;
+        }
+        label.width = size.width;
+        [baseView addSubview:label];
+    }
+    else if (backImg && title.length == 0)
+    {
+        CGSize size = backImg.size;
+        CGFloat scale = size.height/15;
+        size.width = size.width/scale;
+        size.height = 15;
+        [backBtn setImageEdgeInsets:UIEdgeInsetsMake((44-size.height)/2, 0, (44-size.height)/2, CGRectGetWidth(backBtn.frame)-size.width)];
+    }
+    else
+    {
+        CGSize size = backImg.size;
+        CGFloat scale = size.height/15;
+        size.width = size.width/scale;
+        size.height = 15;
+        [backBtn setImageEdgeInsets:UIEdgeInsetsMake((44-size.height)/2, 0, (44-size.height)/2, CGRectGetWidth(backBtn.frame)-size.width)];
+        
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(size.width + 5, 0, 48, 44)];
+        label.textAlignment = NSTextAlignmentLeft;
+        label.textColor = kECWhiteColor;
+        label.backgroundColor = kECClearColor;
+        label.numberOfLines = 1;
+        label.text = title;
+        label.font = [UIFont systemFontOfSize:17];
+        size = [NSString contentAutoSizeWithText:title boundSize:CGSizeMake(MAXFLOAT, 20) font:label.font];
+        if (size.width > 80)
+        {
+            size.width = 80;
+        }
+        else if (size.width < 20)
+        {
+            size.width = 20;
+        }
+        label.width = size.width;
+        [baseView addSubview:label];
+    }
+    if (backImg)
+    {
+        [backBtn setImage:backImg forState:UIControlStateNormal];
+    }
+    [baseView addSubview:backBtn];
+    return baseView;
+}
 
 @end

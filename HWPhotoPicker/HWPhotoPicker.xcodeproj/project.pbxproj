@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0FAFB8F765696DBC809CF28C /* libPods-HWPhotoPicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E2A8A5696D328DEF0762B383 /* libPods-HWPhotoPicker.a */; };
+		BC4729EC1EB1C81200C4BAE5 /* btn_navi_return_title_white.png in Resources */ = {isa = PBXBuildFile; fileRef = BC4729EB1EB1C81200C4BAE5 /* btn_navi_return_title_white.png */; };
 		BCC859B91EA46F2700359AD5 /* UIView+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = BCEC3FC51E8F9A57000B06BD /* UIView+Extension.m */; };
 		BCC859BA1EA46F2E00359AD5 /* NSString+ECExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = BCEC3FB21E8F9A57000B06BD /* NSString+ECExtensions.m */; };
 		BCEC40041E8F9A57000B06BD /* AssetSourceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BCEC3FCB1E8F9A57000B06BD /* AssetSourceManager.m */; };
@@ -42,6 +43,7 @@
 /* Begin PBXFileReference section */
 		2D8A58BD3595FF3468D80A47 /* Pods-HWPhotoPicker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HWPhotoPicker.release.xcconfig"; path = "Pods/Target Support Files/Pods-HWPhotoPicker/Pods-HWPhotoPicker.release.xcconfig"; sourceTree = "<group>"; };
 		66CC029F4236A54723949D08 /* Pods-HWPhotoPicker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HWPhotoPicker.debug.xcconfig"; path = "Pods/Target Support Files/Pods-HWPhotoPicker/Pods-HWPhotoPicker.debug.xcconfig"; sourceTree = "<group>"; };
+		BC4729EB1EB1C81200C4BAE5 /* btn_navi_return_title_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_navi_return_title_white.png; sourceTree = "<group>"; };
 		BCEC3FA51E8F9A57000B06BD /* NSArray+Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Util.h"; sourceTree = "<group>"; };
 		BCEC3FA61E8F9A57000B06BD /* NSArray+Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Util.m"; sourceTree = "<group>"; };
 		BCEC3FA81E8F9A57000B06BD /* NSObject+AOP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+AOP.h"; sourceTree = "<group>"; };
@@ -327,6 +329,7 @@
 			children = (
 				BCEC3FEB1E8F9A57000B06BD /* btn_navi_return_title.png */,
 				BCEC3FEC1E8F9A57000B06BD /* photopicker_nor.png */,
+				BC4729EB1EB1C81200C4BAE5 /* btn_navi_return_title_white.png */,
 				BCEC3FED1E8F9A57000B06BD /* photopicker_sel.png */,
 			);
 			path = Resource;
@@ -463,6 +466,7 @@
 				BCF2546C1E8E61B800703981 /* LaunchScreen.storyboard in Resources */,
 				BCEC40141E8F9A57000B06BD /* photopicker_sel.png in Resources */,
 				BCEC40121E8F9A57000B06BD /* btn_navi_return_title.png in Resources */,
+				BC4729EC1EB1C81200C4BAE5 /* btn_navi_return_title_white.png in Resources */,
 				BCF254691E8E61B800703981 /* Assets.xcassets in Resources */,
 				BCF254671E8E61B800703981 /* Main.storyboard in Resources */,
 				BCEC40131E8F9A57000B06BD /* photopicker_nor.png in Resources */,

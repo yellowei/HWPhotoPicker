@@ -78,7 +78,7 @@
     {
         [self.phManager getThumbnailForAssetObj:asset
                                   withSize:size
-                              deliveryMode:PHImageRequestOptionsDeliveryModeFastFormat
+                              deliveryMode:PHImageRequestOptionsDeliveryModeOpportunistic
                                 completion:^(BOOL ret, UIImage *image)
         {
             completion(ret, image);

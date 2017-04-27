@@ -144,7 +144,7 @@
 //  else
 //  {
     ECBlockSet
-    [[ImageDataAPI sharedInstance] getThumbnailForAssetObj:[self.element photoObj]  withSize:CGSizeMake(180, 180)  completion:^(BOOL ret, UIImage *image) {
+    [[ImageDataAPI sharedInstance] getThumbnailForAssetObj:[self.element photoObj]  withSize:CGSizeMake(540, 540)  completion:^(BOOL ret, UIImage *image) {
         ECBlockGet(strongSelf1)
         if (strongSelf1)
         {

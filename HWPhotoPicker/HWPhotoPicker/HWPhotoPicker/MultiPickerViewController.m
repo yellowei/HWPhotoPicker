@@ -148,18 +148,28 @@
     self.selectedElements = [NSMutableOrderedSet orderedSet];
     self.imageSize = CGSizeMake(75, 75);
     
-    UIButton *btnLeft = [UIButton buttonWithType:UIButtonTypeCustom];
-    [btnLeft setFrame:CGRectMake(0, 0, 53, 28)];
-    [btnLeft setTitle:@"返回" forState:UIControlStateNormal];
-    [btnLeft setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [btnLeft.titleLabel setFont:[UIFont systemFontOfSize:15]];
-    //    UIImage *backBtnImage = [[UIImage imageNamed:@"top_btn_left_n"] stretchableImageWithLeftCapWidth:12 topCapHeight:2];
-    //    [btnLeft setBackgroundImage:backBtnImage forState:UIControlStateNormal];
+    if (!self.navigationItem.leftBarButtonItems)
+    {
+        NSString * title = @"返回";
+        CGSize nameSize = CGSizeMake(30, 20);
+        CGSize imgSize = CGSizeMake(11, 20);
+        CGSize btnSize = CGSizeMake(53, 28);
+        
+        UIButton *btnLeft = [UIButton buttonWithType:UIButtonTypeCustom];
+        [btnLeft setFrame:CGRectMake(0, 0, btnSize.width, btnSize.height)];
+        [btnLeft setTitle:title forState:UIControlStateNormal];
+        [btnLeft setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [btnLeft setImage:[UIImage imageNamed:@"btn_navi_return_title"] forState:UIControlStateNormal];
+        [btnLeft.titleLabel setFont:[UIFont systemFontOfSize:15]];
+        [btnLeft addTarget:self action:@selector(goBack:) forControlEvents:UIControlEventTouchUpInside];
+        
+        [btnLeft setImageEdgeInsets:UIEdgeInsetsMake((btnLeft.height - imgSize.height) / 2, (btnLeft.width - (imgSize.width + nameSize.width + 8)) / 2, (btnLeft.height - imgSize.height) / 2, btnLeft.width - ((btnSize.width - (imgSize.width + nameSize.width + 8)) / 2) - imgSize.width)];
+        [btnLeft setTitleEdgeInsets:UIEdgeInsetsMake(0, - (btnLeft.imageView.image.size.width) + imgSize.width + 8, 0, 0)];
     
-    [btnLeft addTarget:self action:@selector(goBack:) forControlEvents:UIControlEventTouchUpInside];
-    UIView *leftView = [self customBackImage:nil title:nil action:@selector(goBack:)];
-    UIBarButtonItem *leftItem = [[UIBarButtonItem alloc] initWithCustomView:leftView];
-    [self.navigationItem setLeftBarButtonItem:leftItem];
+        UIBarButtonItem *leftItem = [[UIBarButtonItem alloc] initWithCustomView:btnLeft];
+        [self.navigationItem setLeftBarButtonItem:leftItem];
+    }
+    
     
     /****right *****/
     UIButton *btnRight = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -196,39 +206,6 @@
 - (void)dealloc
 {
     DLog(@"MultiPickerViewController Release!!");
-}
-
-
-- (UIView *)customBackImage:(UIImage *)backImg title:(NSString *)title action:(SEL)action
-{
-    if (backImg == nil)
-    {
-        backImg = [UIImage imageNamed:@"btn_navi_return_white"];
-    }
-    if (title == nil || title.length == 0)
-    {
-        title = @"返回";
-    }
-    UIView *baseView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 60, 44)];
-    UIButton *backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    backBtn.frame = CGRectMake(0, 2, 40, 40);
-    if (action)
-    {
-        [backBtn addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
-    }
-    [backBtn setImage:backImg forState:UIControlStateNormal];
-    [baseView addSubview:backBtn];
-    baseView.width = 60;
-    [backBtn setImageEdgeInsets:UIEdgeInsetsMake(12, 0, 12, 30)];
-    
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(12, 0, 48, 44)];
-    label.textAlignment = NSTextAlignmentLeft;
-    label.textColor = kECWhiteColor;
-    label.backgroundColor = kECClearColor;
-    label.text = title;
-    label.font = [UIFont systemFontOfSize:17];
-    [baseView addSubview:label];
-    return baseView;
 }
 
 
@@ -281,191 +258,6 @@
     {
         [self dismissViewControllerAnimated:YES completion:nil];
     }
-}
-
-#pragma mark -Action Sheet Delegate
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (actionSheet.tag == HH_ACTION_SHEET_TAG) {
-        NSMutableArray *infoArray = [NSMutableArray array];
-        
-        //里面存储一个dict，包含，name，
-        switch (buttonIndex) {
-            case 0:
-            {
-                for (ALAsset *asset in self.selectedElements) {
-                    //UIImage *lowQuality = [self imageFromAsset:asset withMaxPixelSize:200];
-                    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-                    UIImage *lowQuality = [self thumbnailForAsset:asset maxPixelSize:400];
-                    [dict setObject:lowQuality forKey:@"IMG"];
-                    NSData *imgData = UIImageJPEGRepresentation(lowQuality, 0);
-                    NSNumber *imgSize = [NSNumber numberWithUnsignedInteger:[imgData length]];
-                    [dict setObject:imgSize forKey:@"SIZE"];
-                    NSString *strName = [asset defaultRepresentation].filename;
-                    [dict setObject:strName forKey:@"NAME"];
-                    [infoArray addObject:dict];
-                }
-                DLog(@"低画质");
-            }
-                break;
-            case 1:
-            {
-                for (ALAsset *asset in self.selectedElements) {
-                    ALAssetRepresentation *assetRep = [asset defaultRepresentation];
-                    //                    ALAssetOrientation assetOrientation = [assetRep orientation];
-                    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-                    CGImageRef image = [assetRep fullScreenImage];
-                    UIImage *generalQuality = [UIImage imageWithCGImage:image];
-                    [dict setObject:generalQuality forKey:@"IMG"];
-                    NSData *imgData = UIImageJPEGRepresentation(generalQuality, 0);
-                    NSNumber *imgSize = [NSNumber numberWithUnsignedInteger:[imgData length]];
-                    [dict setObject:imgSize forKey:@"SIZE"];
-                    NSString *strName = [asset defaultRepresentation].filename;
-                    [dict setObject:strName forKey:@"NAME"];
-                    [infoArray addObject:dict];
-                    
-                    
-                }
-                DLog(@"普通画质");
-            }
-                break;
-            case 2:
-            {
-                for (ALAsset *asset in self.selectedElements) {
-                    
-                    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-                    
-                    //Modify by Tujie 2014-10-23
-                    ALAssetRepresentation *assetRep = [asset defaultRepresentation];
-                    ALAssetOrientation assetOrientation = [assetRep orientation];
-                    CGImageRef image = [assetRep fullResolutionImage];
-                    UIImage *highQuality = [UIImage imageWithCGImage:image scale:1 orientation:(UIImageOrientation)assetOrientation];//[UIImage imageWithCGImage:image];
-                    //End modify
-                    
-                    //CGImageRef image = [[asset defaultRepresentation] fullResolutionImage];
-                    //UIImage *highQuality = nil;
-                    NSData *imgData = nil;
-                    
-                    if ([asset.description rangeOfString:@"JPG"].location != NSNotFound){
-                        //highQuality = [UIImage imageWithCGImage:image scale:1.0f orientation:UIImageOrientationRight];
-                        imgData = UIImageJPEGRepresentation(highQuality, 0);
-                        // orientation 6
-                    }
-                    else { //png
-                        //highQuality = [UIImage imageWithCGImage:image];
-                        imgData = UIImagePNGRepresentation(highQuality);
-                    }
-                    
-                    [dict setObject:highQuality forKey:@"IMG"];
-                    
-                    NSNumber *imgSize = [NSNumber numberWithUnsignedInteger:[imgData length]];
-                    
-                    [dict setObject:imgSize forKey:@"SIZE"];
-                    NSString *strName = [asset defaultRepresentation].filename;
-                    [dict setObject:strName forKey:@"NAME"];
-                    [infoArray addObject:dict];
-                }
-                DLog(@"高画质");
-            }
-                break;
-                
-            default:
-                break;
-        }
-        
-        DLog(@"取到的image array: %@",infoArray);
-        if (delegate && [delegate respondsToSelector:@selector(multiPickerViewController:didFinishPickingWithImages:)]) {
-            [delegate multiPickerViewController:self didFinishPickingWithImages:infoArray];
-        }
-        
-        [self dismissViewControllerAnimated:YES completion:^{
-            
-        }];
-    }
-}
-
-- (void)willPresentActionSheet:(UIActionSheet *)actionSheet
-{
-    if (actionSheet.tag == HH_ACTION_SHEET_TAG) {
-        for (id view in actionSheet.subviews) {
-            if ([view isKindOfClass:[UIButton class]]) {
-                UIButton *button = (UIButton *)view;
-                [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-            }
-        }
-    }
-    
-}
-
-
-
-- (NSString *)filePath:(ALAsset *)asset
-{
-    if (![asset isKindOfClass:[ALAsset class]]) {
-        DLog(@"取出的文件类型错误");
-        return nil;
-    }
-    
-    //NSString *fileUrl = [asset valueForProperty:ALAssetPropertyURLs];
-    
-    //NSString *fileId = [self getImageID:fileUrl];
-    //NSString *suffix = [self getFileSuffix:fileUrl];
-    NSString *fileName = asset.defaultRepresentation.filename;
-    
-    DLog(@"fileName : %@",fileName);
-    return nil;
-}
-
--(NSString *) getImageID:(NSString *)imageInfo
-{
-    NSArray *infos = [[imageInfo description] componentsSeparatedByString:@"id="];
-    NSString *info = [infos lastObject];
-    NSArray *subInfos = [info componentsSeparatedByString:@"&"];
-    NSString *imageID = [subInfos objectAtIndex:0];
-    return imageID;
-}
-
-- (NSString *)getFileSuffix:(NSString *)fileInfo
-{
-    NSArray *infos = [[fileInfo description] componentsSeparatedByString:@"id="];
-    NSString *info = [infos lastObject];
-    NSArray *subInfos = [info componentsSeparatedByString:@"&"];
-    NSString *suffixString = [subInfos objectAtIndex:1];
-    NSArray *suffixArray = [suffixString componentsSeparatedByString:@"="];
-    NSString *suffix = [suffixArray objectAtIndex:1];
-    return [suffix stringByReplacingOccurrencesOfString:@"[ ,;,\n,\t,\",}]" withString:@"" options: NSRegularExpressionSearch range:NSMakeRange(0, suffix.length)];
-    ;
-}
-
--(BOOL)writeImage:(UIImage*)image toFileAtPath:(NSString*)aPath
-{
-    if ((image == nil) || (aPath == nil) || ([aPath isEqualToString:@""]))
-        return NO;
-    @try
-    {
-        NSData *imageData = nil;
-        NSString *ext = [aPath pathExtension];
-        if ([ext isEqualToString:@"PNG"]){
-            imageData = UIImagePNGRepresentation(image);
-        }
-        else{
-            
-            imageData = UIImageJPEGRepresentation(image, 0);
-        }
-        if ((imageData == nil) || ([imageData length] <= 0))
-            return NO;
-        
-        [imageData writeToFile:aPath atomically:YES];
-        
-        return YES;
-    }
-    
-    @catch (NSException *e){
-        DLog(@"create thumbnail exception.");
-    }
-    
-    return NO;
-    
 }
 
 
@@ -751,7 +543,7 @@
             m_backBtn = [[UIButton alloc]initWithFrame:CGRectMake(8, (self.view.frame.origin.y + 20 + 5), LabBackbuttonWidth, LabBackbuttonHeight)];
             m_backBtn.titleLabel.textAlignment = NSTextAlignmentCenter;
             
-            [m_backBtn setImage:[UIImage imageNamed:@"btn_navi_return_title"] forState:UIControlStateNormal];
+            [m_backBtn setImage:[UIImage imageNamed:@"btn_navi_return_title_white"] forState:UIControlStateNormal];
             [m_backBtn setImageEdgeInsets:UIEdgeInsetsMake((LabBackbuttonHeight - 14) / 2, (LabBackbuttonWidth - 45) / 2, (LabBackbuttonHeight - 14) / 2, (LabBackbuttonWidth - 45) / 2)];
             m_backBtn.backgroundColor = ECColorWithRGB(0, 0, 0, 0);
             m_backBtn.layer.cornerRadius = CGRectGetHeight(m_backBtn.frame)/2;
@@ -846,7 +638,6 @@
                         [UIApplication sharedApplication].statusBarHidden = YES;
                     }
                     completion:^(BOOL finished){
-                        ECBlockGet(strongSelf)
                         
                     }];
     
@@ -897,98 +688,6 @@
         }];
     }
 }
-
-#pragma mark - Utils
-
-// Helper methods for thumbnailForAsset:maxPixelSize:
-static size_t getAssetBytesCallback(void *info, void *buffer, off_t position, size_t count) {
-    ALAssetRepresentation *rep = (__bridge id)info;
-    
-    NSError *error = nil;
-    size_t countRead = [rep getBytes:(uint8_t *)buffer fromOffset:position length:count error:&error];
-    
-    if (countRead == 0 && error) {
-        // We have no way of passing this info back to the caller, so we log it, at least.
-        DLog(@"thumbnailForAsset:maxPixelSize: got an error reading an asset: %@", error);
-    }
-    
-    return countRead;
-}
-
-static void releaseAssetCallback(void *info) {
-    // The info here is an ALAssetRepresentation which we CFRetain in thumbnailForAsset:maxPixelSize:.
-    // This release balances that retain.
-    CFRelease(info);
-}
-
-// Returns a UIImage for the given asset, with size length at most the passed size.
-// The resulting UIImage will be already rotated to UIImageOrientationUp, so its CGImageRef
-// can be used directly without additional rotation handling.
-// This is done synchronously, so you should call this method on a background queue/thread.
-- (UIImage *)thumbnailForAsset:(ALAsset *)asset maxPixelSize:(NSUInteger)size {
-    NSParameterAssert(asset != nil);
-    NSParameterAssert(size > 0);
-    if ([asset isKindOfClass:[ALAsset class]])
-    {
-        ALAssetRepresentation *rep = [asset defaultRepresentation];
-        
-        CGDataProviderDirectCallbacks callbacks = {
-            .version = 0,
-            .getBytePointer = NULL,
-            .releaseBytePointer = NULL,
-            .getBytesAtPosition = getAssetBytesCallback,
-            .releaseInfo = releaseAssetCallback,
-        };
-        
-        CGDataProviderRef provider = CGDataProviderCreateDirect((void *)CFBridgingRetain(rep), [rep size], &callbacks);
-        CGImageSourceRef source = CGImageSourceCreateWithDataProvider(provider, NULL);
-        
-        CGImageRef imageRef = CGImageSourceCreateThumbnailAtIndex(source, 0, (__bridge CFDictionaryRef) @{
-                                                                                                          (NSString *)kCGImageSourceCreateThumbnailFromImageAlways : @YES,
-                                                                                                          (NSString *)kCGImageSourceThumbnailMaxPixelSize : [NSNumber numberWithInt:size],
-                                                                                                          (NSString *)kCGImageSourceCreateThumbnailWithTransform : @YES,
-                                                                                                          });
-        CFRelease(source);
-        CFRelease(provider);
-        
-        if (!imageRef) {
-            return nil;
-        }
-        
-        UIImage *toReturn = [UIImage imageWithCGImage:imageRef];
-        
-        CFRelease(imageRef);
-        
-        return toReturn;
-    }
-    else if ([asset isKindOfClass:[PHAsset class]])
-    {
-        
-    }
-    return nil;
-}
-
-
-- (UIImage *)imageFromAsset:(ALAsset *)asset withMaxPixelSize:(CGFloat)size
-{
-    NSParameterAssert(asset != nil);
-    
-    ALAssetRepresentation *assetRepresentation = [asset defaultRepresentation];
-    
-    NSDictionary* options = [[NSDictionary alloc] initWithObjectsAndKeys:
-                             (id)kCFBooleanTrue, (id)kCGImageSourceCreateThumbnailWithTransform,
-                             (id)kCFBooleanTrue, (id)kCGImageSourceCreateThumbnailFromImageAlways,
-                             (id)[NSNumber numberWithDouble:size], (id)kCGImageSourceThumbnailMaxPixelSize,
-                             nil];
-    CGImageRef image = [assetRepresentation CGImageWithOptions:options];
-    
-    float_t scaleHeight = CGImageGetHeight(image)/size;
-    
-    UIImage *returnImage = [UIImage imageWithCGImage:image scale:scaleHeight orientation:0];
-    
-    return returnImage;
-}
-
 
 
 @end

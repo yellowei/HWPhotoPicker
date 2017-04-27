@@ -27,3 +27,13 @@
 
 @end
 
+
+@interface UIImage(ECExtensions)
+
++ (UIImage *)imageWithColor:(UIColor *)color;
++ (UIImage *)imageWithColor:(UIColor *)color size:(CGSize)size;
+@end
+
+@interface UIView(test)
++ (UIView *)customBackImage:(UIImage *)backImg title:(NSString *)title target:(id)target action:(SEL)action;
+@end
